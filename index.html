@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DropPear</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Home Screen -->
+  <div id="screen-home" class="screen active">
+    <h1 class="game-title">DropPear</h1>
+    <p class="subtitle">三消珠子遊戲</p>
+    <div class="level-grid">
+      <button class="btn lv-easy"   data-level="1">Lv.1</button>
+      <button class="btn lv-easy"   data-level="2">Lv.2</button>
+      <button class="btn lv-easy"   data-level="3">Lv.3</button>
+      <button class="btn lv-mid"    data-level="4">Lv.4</button>
+      <button class="btn lv-mid"    data-level="5">Lv.5</button>
+      <button class="btn lv-mid"    data-level="6">Lv.6</button>
+      <button class="btn lv-normal" data-level="7">Lv.7</button>
+      <button class="btn lv-normal" data-level="8">Lv.8</button>
+      <button class="btn lv-hard"   data-level="9">Lv.9</button>
+      <button class="btn lv-hard"   data-level="10">Lv.10</button>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="screen-game" class="screen">
+    <div id="game-ui">
+      <div id="ui-top">
+        <button id="btn-back">&#8592; 返回</button>
+        <span id="ui-difficulty"></span>
+        <div id="ui-score-wrap">得分：<span id="ui-score">0</span></div>
+        <div id="ui-timer-wrap">時間：<span id="ui-timer">60</span>s</div>
+      </div>
+
+      <div id="canvas-wrap">
+        <canvas id="game-canvas"></canvas>
+        <div id="red-flash"></div>
+      </div>
+
+      <div id="hint-bag-area">
+        <span class="bag-label">提示袋</span>
+        <canvas id="bag-canvas"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Over / Win Screen -->
+  <div id="screen-result" class="screen">
+    <h2 id="result-title">遊戲結束</h2>
+    <p id="result-reason"></p>
+    <p class="result-score">得分：<span id="result-score">0</span></p>
+    <button class="btn btn-easy" id="btn-retry">再玩一次</button>
+    <button class="btn" id="btn-home">回主頁</button>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
