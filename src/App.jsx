@@ -8,6 +8,7 @@ import {
   checkMatch,
   checkGameOver,
   GAME_TIME,
+  WIN_SCORE,
   LEVEL_CONFIG,
   MAX_ROWS,
   WARN_ROWS,
@@ -40,6 +41,8 @@ export default function App() {
   // Refs for intervals
   const dropIntervalRef = useRef(null);
   const timerIntervalRef = useRef(null);
+  const scoreRef = useRef(0);
+  const levelRef = useRef(0);
 
   // Start a new game
   const startGame = useCallback((selectedLevel) => {
@@ -52,9 +55,11 @@ export default function App() {
     }
 
     setLevel(selectedLevel);
+    levelRef.current = selectedLevel;
     setBoard(newBoard);
     setBag([]);
     setScore(0);
+    scoreRef.current = 0;
     setTimer(GAME_TIME);
     setGameActive(true);
     setShowWarning(false);
@@ -65,11 +70,17 @@ export default function App() {
   const endGame = useCallback((reason, msg, finalScore, finalLevel) => {
     setGameActive(false);
 
-    if (reason === 'time') {
+    if (reason === 'time' || reason === 'win') {
       setCompletedLevels(prev => Math.max(prev, finalLevel));
     }
 
-    setResultTitle(reason === 'time' ? '時間到！' : '遊戲結束');
+    if (reason === 'time') {
+      setResultTitle('時間到！');
+    } else if (reason === 'win') {
+      setResultTitle('通關成功！');
+    } else {
+      setResultTitle('遊戲結束');
+    }
     setResultReason(msg);
     setResultScore(finalScore);
     setScreen('result');
@@ -104,18 +115,26 @@ export default function App() {
 
       performMatch(newBag);
       setBag(currentBag);
-      setScore(prev => prev + addedScore);
+      const finalScore = score + addedScore;
+      setScore(finalScore);
+      scoreRef.current = finalScore;
+
+      // v0.41: Check if win condition (score >= 100)
+      if (finalScore >= WIN_SCORE) {
+        endGame('win', '恭喜通關！', finalScore, level);
+        return;
+      }
 
       // Check if bag is full
       if (currentBag.length >= BAG_MAX) {
-        endGame('bag', '儲存袋已滿！', score + addedScore, level);
+        endGame('bag', '儲存袋已滿！', finalScore, level);
         return;
       }
 
       // Check game over
       const overCheck = checkGameOver(result.board);
       if (overCheck.gameOver) {
-        endGame('overflow', overCheck.message, score + addedScore, level);
+        endGame('overflow', overCheck.message, finalScore, level);
         return;
       }
 
@@ -138,10 +157,10 @@ export default function App() {
     // Drop interval
     dropIntervalRef.current = setInterval(() => {
       setBoard(prevBoard => {
-        const newBoard = pushRow(prevBoard, level);
+        const newBoard = pushRow(prevBoard, levelRef.current);
         const overCheck = checkGameOver(newBoard);
         if (overCheck.gameOver) {
-          endGame('overflow', overCheck.message, score, level);
+          endGame('overflow', overCheck.message, scoreRef.current, levelRef.current);
         } else {
           setShowWarning(occupiedRows(newBoard) >= WARN_ROWS);
         }
@@ -153,7 +172,7 @@ export default function App() {
     timerIntervalRef.current = setInterval(() => {
       setTimer(prev => {
         if (prev - 1 <= 0) {
-          endGame('time', '時間到！', score, level);
+          endGame('time', '時間到！', scoreRef.current, levelRef.current);
           return 0;
         }
         return prev - 1;
@@ -164,7 +183,7 @@ export default function App() {
       if (dropIntervalRef.current) clearInterval(dropIntervalRef.current);
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
     };
-  }, [gameActive, level, score, endGame]);
+  }, [gameActive, level, endGame]);
 
   // Handle canvas click
   const handleCanvasClick = useCallback(

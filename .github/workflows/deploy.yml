@@ -1,0 +1,35 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # 當 main 分支有 push 時觸發
+
+permissions:
+  contents: write  # 賦予 Action 寫入分支的權限
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ⚙️
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install and Build 🔧
+        run: |
+          npm install
+          npm run build
+
+      - name: Deploy to 'web' branch 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist    # 要部署的資料夾（Vite 預設是 dist）
+          branch: web     # 目的地分支
+          clean: true     # 自動清除該分支上不在 dist 裡的舊檔案

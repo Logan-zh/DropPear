@@ -53,24 +53,6 @@ export function GameCanvas({ board }) {
         drawBead(ctx, x, y, CELL, color);
       }
     }
-
-    // Highlight clickable beads
-    for (let c = 0; c < COLS; c++) {
-      for (let r = MAX_ROWS - 1; r >= 0; r--) {
-        if (board[r][c] !== null) {
-          const x = PAD + c * (CELL + PAD);
-          const y = PAD + r * (CELL + PAD);
-          ctx.save();
-          ctx.strokeStyle = 'rgba(255,255,255,0.5)';
-          ctx.lineWidth = 2;
-          ctx.beginPath();
-          ctx.roundRect(x, y, CELL, CELL, Math.round(CELL * 0.38));
-          ctx.stroke();
-          ctx.restore();
-          break;
-        }
-      }
-    }
   }, [board]);
 
   return <canvas ref={canvasRef} id="game-canvas" width={CANVAS_W} height={CANVAS_H} />;

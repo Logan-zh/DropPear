@@ -4,20 +4,22 @@ export const MAX_ROWS = 10;
 export const WARN_ROWS = 7;
 export const BAG_MAX = 6;
 export const MATCH_COUNT = 3;
-export const GAME_TIME = 60;
+export const GAME_TIME = 30; // v0.41: reduced from 60 to 30 seconds
+export const WIN_SCORE = 100; // v0.41: win condition score
+export const MATCH_SCORE = 8; // v0.41: score for matching 3 beads
 export const COLORS = ['red', 'green', 'blue', 'yellow', 'purple', 'orange', 'silver'];
 
 export const LEVEL_CONFIG = [
-  { label: 'Lv.1', interval: 6000, colors: 4, initRows: 2 },
-  { label: 'Lv.2', interval: 5500, colors: 4, initRows: 2 },
-  { label: 'Lv.3', interval: 5000, colors: 4, initRows: 2 },
-  { label: 'Lv.4', interval: 5000, colors: 4, initRows: 3 },
-  { label: 'Lv.5', interval: 4500, colors: 4, initRows: 3 },
-  { label: 'Lv.6', interval: 4500, colors: 5, initRows: 3 },
+  { label: 'Lv.1', interval: 4000, colors: 4, initRows: 2 },
+  { label: 'Lv.2', interval: 4000, colors: 4, initRows: 2 },
+  { label: 'Lv.3', interval: 4000, colors: 4, initRows: 2 },
+  { label: 'Lv.4', interval: 4000, colors: 4, initRows: 3 },
+  { label: 'Lv.5', interval: 4000, colors: 4, initRows: 3 },
+  { label: 'Lv.6', interval: 4000, colors: 5, initRows: 3 },
   { label: 'Lv.7', interval: 4000, colors: 5, initRows: 3 },
   { label: 'Lv.8', interval: 4000, colors: 5, initRows: 4 },
   { label: 'Lv.9', interval: 4000, colors: 5, initRows: 4 },
-  { label: 'Lv.10', interval: 4000, colors: 5, initRows: 4 },
+  { label: 'Lv.10', interval: 3000, colors: 5, initRows: 4 },
 ];
 
 export const COLOR_MAP = {
@@ -122,7 +124,7 @@ export function checkMatch(hintBag) {
       });
       return {
         matched: true,
-        score: 3,
+        score: MATCH_SCORE,
         bag: filtered,
         needsRecursiveCheck: true,
       };
