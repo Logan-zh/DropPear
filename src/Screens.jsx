@@ -6,7 +6,6 @@ export function HomeScreen({ onLevelSelect, completedLevels }) {
   return (
     <div id="screen-home" className="screen active">
       <h1 className="game-title">DropPear</h1>
-      <p className="subtitle">三消珠子遊戲</p>
       <div className="level-grid">
         {LEVEL_CONFIG.map((level, idx) => {
           const levelNum = idx + 1;
@@ -61,7 +60,7 @@ export function GameScreen({ level, score, timer, difficulty, onBack, onCanvasCl
         </div>
 
         <div id="hint-bag-area">
-          <span className="bag-label">儲存袋</span>
+          <span className="bag-label">Store</span>
           <BagCanvas bag={bag} />
         </div>
       </div>
